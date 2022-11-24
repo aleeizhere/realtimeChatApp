@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useRef } from "react";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { useFormik } from "formik";
+import { RegistrationSchema } from "../validations/RegistrationSchema";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 
 const initialValues = {
   name: "",
@@ -12,11 +15,15 @@ const Register = () => {
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues,
+      validationSchema: RegistrationSchema,
       onSubmit: (values, action) => {
         console.log(values);
+        action.resetForm();
       },
     });
 
+  const passwordField = useRef(null);
+  const cpasswordField = useRef(null);
   /*
     when you do handleChange it keeps updating the initialValues object and keeps returning it as a values object
     down in the element we keep using it in the value prop of the element
@@ -34,7 +41,7 @@ const Register = () => {
           <span className="text-6xl font-extralight">Register</span>
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col w-full  justify-around"
+            className="flex flex-col w-full justify-around relative"
           >
             <input
               type="text"
@@ -44,6 +51,7 @@ const Register = () => {
               onChange={handleChange}
               className="px-3 py-4 mb-2 outline-none bg-neutral-100 rounded-md focus:outline-1 focus:outline-green-300 transition-all ease-in-out"
             />
+
             <input
               type="text"
               placeholder="Email"
@@ -52,24 +60,56 @@ const Register = () => {
               onChange={handleChange}
               className="px-3 py-4 mb-2 outline-none bg-neutral-100 rounded-md focus:outline-1 focus:outline-green-300 transition-all ease-in-out"
             />
-            <input
-              type="password"
-              autoComplete="off"
-              placeholder="Password"
-              name="password"
-              value={values.password}
-              onChange={handleChange}
-              className="px-3 py-4 mb-2 outline-none bg-neutral-100 rounded-md focus:outline-1 focus:outline-green-300 transition-all ease-in-out"
-            />
-            <input
-              type="password"
-              autoComplete="off"
-              placeholder="Confirm Password"
-              name="confirmPassword"
-              value={values.confirmPassword}
-              onChange={handleChange}
-              className="px-3 py-4 mb-2 outline-none bg-neutral-100 rounded-md focus:outline-1 focus:outline-green-300 transition-all ease-in-out"
-            />
+            <div className="mb-2 relative">
+              <input
+                type="password"
+                ref={passwordField}
+                autoComplete="off"
+                placeholder="Password"
+                name="password"
+                value={values.password}
+                onChange={handleChange}
+                className="px-3 py-4 w-full  outline-none bg-neutral-100 rounded-md focus:outline-1 focus:outline-green-300 transition-all ease-in-out"
+              />
+
+              <span
+                className="absolute right-0 translate-y-1/2 mr-2 opacity-30 cursor-pointer hover:opacity-100"
+                onClick={() => {
+                  passwordField.current.attributes.type.nodeValue === "password"
+                    ? (passwordField.current.attributes.type.nodeValue = "text")
+                    : (passwordField.current.attributes.type.nodeValue =
+                        "password");
+                }}
+              >
+                <VisibilityOutlinedIcon />
+              </span>
+            </div>
+
+            <div className="mb-2 relative">
+              <input
+                type="password"
+                ref={cpasswordField}
+                autoComplete="off"
+                placeholder="Confirm Password"
+                name="confirmPassword"
+                value={values.confirmPassword}
+                onChange={handleChange}
+                className="px-3 py-4 w-full  outline-none bg-neutral-100 rounded-md focus:outline-1 focus:outline-green-300 transition-all ease-in-out"
+              />
+              <span
+                className="absolute right-0 translate-y-1/2 mr-2 opacity-30 cursor-pointer hover:opacity-100"
+                onClick={() => {
+                  cpasswordField.current.attributes.type.nodeValue ===
+                  "password"
+                    ? (cpasswordField.current.attributes.type.nodeValue =
+                        "text")
+                    : (cpasswordField.current.attributes.type.nodeValue =
+                        "password");
+                }}
+              >
+                <VisibilityOutlinedIcon />
+              </span>
+            </div>
             <input type="file" id="file" className="hidden" />
             <label
               htmlFor="file"
