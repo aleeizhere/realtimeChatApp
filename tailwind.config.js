@@ -6,6 +6,9 @@ module.exports = {
       fontFamily: {
         logo: ["Comfortaa"],
       },
+      translate: {
+        full1: "105%",
+      },
     },
   },
   plugins: [],
